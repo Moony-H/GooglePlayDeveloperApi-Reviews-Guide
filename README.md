@@ -2,6 +2,8 @@
 
 이번에는 리뷰를 가져오고 답하는 api에 대해 설명하겠습니다.
 
+<br/>
+
 ## 사용 환경
 
 이번 글에서 사용할 언어는 Kotlin 입니다. compiler로는 Intellij CE를 사용합니다.
@@ -14,6 +16,8 @@
 
 가장 먼저 볼 api는 list 입니다.
 
+<br/>
+
 
 list는 여러 리뷰를 가져올 수 있습니다.
 
@@ -23,8 +27,12 @@ response로 오는 pagenationToken을 token query parameter에 사용하여 다�
 
 token parameter에 아무것도 넣지 않는다면 맨 처음 리뷰가 있는 첫 페이지 부터 주어집니다.
 
+<br/>
+
 
 먼저 아래와 같이 comment 객체를 작성합니다.
+
+<br/>
 
 **Comment.kt**
 
@@ -107,7 +115,13 @@ data class Comment(
 
 ```
 
+<br/>
+
+<br/>
+
 그 다음 Review객체를 생성합니다.
+
+<br/>
 
 **Review.kt**
 ```kotlin
@@ -123,7 +137,11 @@ data class Review(
 
 ```
 
+<br/>
+
 그 다음 아래와 같이 response 객체를 생성합니다.
+
+<br/>
 
 **GetReviewListResponseData.kt**
 
@@ -150,7 +168,16 @@ data class GetReviewListResponseData(
     )
 }
 ```
+
+<br/>
+
+
+<br/>
+
+
 마지막으로 ReviewApi interface를 작성합니다.
+
+<br/>
 
 **ReviewApi.kt**
 
@@ -175,8 +202,14 @@ interface ReviewApi {
 
 ```
 
+<br/>
+
+<br/>
+
 그 다음 위의 interface로 retrofit 객체를 만듭니다.
 
+
+<br/>
 
 
 **Main.kt**
@@ -191,7 +224,13 @@ val reviewRetrofit = Retrofit.Builder()
         .create(ReviewApi::class.java)
 ```
 
+<br/>
+
+<br/>
+
 그 다음 retrofit 객체로 api를 호출합니다.
+
+<br/>
 
 **Main.kt**
 
@@ -201,6 +240,10 @@ val reviewRetrofit = Retrofit.Builder()
     println("review list response body: ${reviewListResponse.body()}")
 ```
 
+<br/>
+
+<br/>
+
 ## Reviews get
 
 리뷰 하나를 가져올 수 있는 api입니다.
@@ -209,8 +252,14 @@ val reviewRetrofit = Retrofit.Builder()
 
 이 reviewId를 얻기 위해서는 위의 list를 사용해야 토큰을 알 수 있습니다.
 
+<br/>
+
+<br/>
+
 
 먼저 ReviewApi.kt에 아래와 같은 코드를 추가합니다.
+
+<br/>
 
 **ReviewApi.kt**
 
@@ -229,7 +278,14 @@ val reviewRetrofit = Retrofit.Builder()
 
 ```
 
+<br/>
+
+<br/>
+
 그 다음 **Main.kt**애 코드를 추가하여 api를 호출합니다.
+
+<br/>
+
 
 **Main.kt**
 
@@ -241,6 +297,11 @@ println("review response body: ${reviewResponse.body()}")
 
 ```
 
+<br/>
+
+<br/>
+
+
 ## Reviews reply
 
 리뷰에 답을 할 수 있는 api입니다.
@@ -251,6 +312,8 @@ list api가 먼저 선행 되어 reviewId를 저장해야 합니다.
 
 먼저 **PostReplyReviewBody.kt**파일을 작성합니다.
 
+<br/>
+
 ```kotlin
 data class PostReplyReviewBody(
     @SerializedName("replyText")
@@ -258,7 +321,13 @@ data class PostReplyReviewBody(
 )
 ```
 
+<br/>
+
+<br/>
+
 그 다음 response를 받을 **PostReplyReviewResponseData.kt**를 작성합니다.
+
+<br/>
 
 ```kotlin
 data class PostReplyReviewResponseData(
@@ -280,8 +349,14 @@ data class PostReplyReviewResponseData(
 }
 ```
 
+<br/>
+
+<br/>
+
 
 마지막으로 아래와 같은 코드를 **ReviewApi.kt**에 추가합니다.
+
+<br/>
 
 ```kotlin
     @POST("{packageName}/reviews/{reviewId}:reply")
@@ -297,13 +372,25 @@ data class PostReplyReviewResponseData(
     ): Response<PostReplyReviewResponseData>
 ```
 
+<br/>
+
+<br/>
+
 이제 Main.kt에 아래의 코드로 api를 호출합니다.
+
+<br/>
 
 ```kotlin
 val response=reviewRetrofit.postReplyReview("{packageName}","{reviewId}",token, PostReplyReviewBody("reply"))
 println("review reply response code: ${response.code()}")
 println("review reply response body: ${response.body()}")
 ```
+
+<br/>
+
+<br/>
+
+이로서 모든 api의 method를 설명하였습니다.
 
 
 
